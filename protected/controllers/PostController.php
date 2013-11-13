@@ -47,12 +47,13 @@ class PostController extends Controller
 
 	/**
 	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
+	 *
 	 */
-	public function actionView($id)
+	public function actionView()
 	{
+        $post = $this->loadModel();
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=> $post,
 		));
 	}
 
@@ -86,7 +87,7 @@ class PostController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model=$this->loadModel();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -110,7 +111,7 @@ class PostController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$this->loadModel()->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -122,7 +123,21 @@ class PostController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Post');
+        $criteria=new CDbCriteria(array(
+            'condition'=>'status='.Post::STATUS_PUBLISHED,
+            'order'=>'update_time DESC',
+            'with'=>'commentCount',
+        ));
+        if(isset($_GET['tag']))
+            $criteria->addSearchCondition('tags',$_GET['tag']);
+
+		$dataProvider=new CActiveDataProvider('Post', array (
+                'pagination'=>array(
+                    'pageSize'=>5,
+                ),
+                'criteria'=>$criteria,
+            )
+        );
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -150,13 +165,33 @@ class PostController extends Controller
 	 * @return Post the loaded model
 	 * @throws CHttpException
 	 */
-	public function loadModel($id)
+	/*public function loadModel($id)
 	{
 		$model=Post::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
-	}
+	}*/
+    private $_model;
+
+    public function loadModel()
+    {
+        if($this->_model===null)
+        {
+            if(isset($_GET['id']))
+            {
+                if(Yii::app()->user->isGuest)
+                    $condition='status='.Post::STATUS_PUBLISHED
+                        .' OR status='.Post::STATUS_ARCHIVED;
+                else
+                    $condition='';
+                $this->_model=Post::model()->findByPk(intval($_GET['id']), $condition);
+            }
+            if($this->_model===null)
+                throw new CHttpException(404,'Запрашиваемая страница не существует.');
+        }
+        return $this->_model;
+    }
 
 	/**
 	 * Performs the AJAX validation.

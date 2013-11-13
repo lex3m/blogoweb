@@ -164,6 +164,23 @@ class Post extends CActiveRecord
             return false;
     }
 
+    /**
+     * Update tags frequency
+     */
+    protected function afterSave()
+    {
+        parent::afterSave();
+        Tag::model()->updateFrequency($this->_oldTags, $this->tags);
+    }
+
+    private $_oldTags;
+
+    protected function afterFind()
+    {
+        parent::afterFind();
+        $this->_oldTags = $this->tags;
+    }
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

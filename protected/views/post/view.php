@@ -6,6 +6,7 @@ $this->breadcrumbs=array(
 	'Записи'=>array('index'),
 	$model->title,
 );
+$this->pageTitle=$model->title;
 
 $this->menu=array(
 	array('label'=>'Список Записей', 'url'=>array('index')),
@@ -16,9 +17,9 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Post #<?php echo $model->id; ?></h1>
+<h1>Просмотр Записи #<?php echo $model->id; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php /*$this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
@@ -30,4 +31,36 @@ $this->menu=array(
 		'update_time',
 		'author_id',
 	),
+)); */?>
+
+<?php $this->renderPartial('_view', array(
+    'data'=>$model,
 )); ?>
+
+<div id="comments">
+    <?php if($model->commentCount>=1): ?>
+        <h3>
+            <?php echo $model->commentCount>1 ? $model->commentCount . ' комментариев' : 'комментарий'; ?>
+        </h3>
+
+        <?php $this->renderPartial('_comments',array(
+            'post'=>$model,
+            'comments'=>$model->comments,
+        )); ?>
+    <?php endif; ?>
+
+    <h3>Оставьте комментарий</h3>
+
+    <?php if(Yii::app()->user->hasFlash('commentSubmitted')): ?>
+        <div class="flash-success">
+            <?php echo Yii::app()->user->getFlash('commentSubmitted'); ?>
+        </div>
+    <?php else: ?>
+        <?php /*$this->renderPartial('/comment/_form',array(
+            'model'=>$comment,
+        )); */?>
+    <?php endif; ?>
+
+
+
+</div><!-- comments -->

@@ -2,10 +2,27 @@
 /* @var $this PostController */
 /* @var $model Post */
 /* @var $form CActiveForm */
+
+?>
+
+<?php
+Yii::app()->clientScript->registerScript('post-form', "
+    tinymce.init({
+        selector: '#contents',
+        language: 'ru',
+        theme: 'modern',
+        plugins: [
+            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'insertdatetime media nonbreaking save table contextmenu directionality',
+            'emoticons template paste textcolor'
+        ],
+    });
+", CClientScript::POS_END);
 ?>
 
 <div class="form">
-
+    <!--<textarea id="contents"></textarea>-->
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'post-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -27,7 +44,8 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'content'); ?>
-		<?php echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50)); ?>
+
+		<?php echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50, 'id'=>'contents')); ?>
 		<?php echo $form->error($model,'content'); ?>
 	</div>
 
@@ -83,3 +101,4 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+

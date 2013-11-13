@@ -39,12 +39,12 @@ class Tag extends CActiveRecord
      * @param $tags
      * @return array
      */
-    public function string2array($sTags)
+    public static function string2array($sTags)
     {
         return preg_split('/\s*,\s*/', trim($sTags), -1, PREG_SPLIT_NO_EMPTY);
     }
 
-    public function array2string($aTags)
+    public static function array2string($aTags)
     {
         return implode(',', $aTags);
     }
@@ -99,7 +99,56 @@ class Tag extends CActiveRecord
 		));
 	}
 
-	/**
+    /**
+     * @param $oldTags
+     * @param $newTags
+     * Adding and removing necessary tags
+     */
+    public function updateFrequency($oldTags, $newTags)
+    {
+        $oldTags=self::string2array($oldTags);
+        $newTags=self::string2array($newTags);
+        $this->addTags(array_values(array_diff($newTags,$oldTags)));
+        $this->removeTags(array_values(array_diff($oldTags,$newTags)));
+    }
+
+    /**
+     * @param $tags
+     * Adding new tags in tbl_tag
+     */
+    public function addTags($tags)
+    {
+        $criteria=new CDbCriteria;
+        $criteria->addInCondition('name',$tags);
+        $this->updateCounters(array('frequency'=>1),$criteria);
+        foreach($tags as $name)
+        {
+            if(!$this->exists('name=:name',array(':name'=>$name)))
+            {
+                $tag=new Tag;
+                $tag->name=$name;
+                $tag->frequency=1;
+                $tag->save();
+            }
+        }
+    }
+
+    /**
+     * @param $tags
+     * Removing tags with frequency less than 0
+     */
+    public function removeTags($tags)
+    {
+        if(empty($tags))
+            return;
+        $criteria=new CDbCriteria;
+        $criteria->addInCondition('name',$tags);
+        $this->updateCounters(array('frequency'=>-1),$criteria);
+        $this->deleteAll('frequency<=0');
+    }
+
+
+    /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
