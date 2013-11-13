@@ -12,6 +12,7 @@
  * @property integer $create_time
  * @property integer $update_time
  * @property integer $author_id
+ * @property integer $category_id
  *
  * The followings are the available model relations:
  * @property Comment[] $comments
@@ -39,7 +40,7 @@ class Post extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, content, status', 'required'),
+			array('title, content, status, category_id', 'required'),
 			array('title', 'length', 'max'=>128,
                 'message'=>'Длина заголовка не должна превышать 128 символов.'),
             array('status', 'in', 'range'=>array(1,2,3),
@@ -86,6 +87,7 @@ class Post extends CActiveRecord
 			'create_time' => 'Дата создания',
 			'update_time' => 'Дата обновления',
 			'author_id' => 'Автор',
+            'category_id' => 'Категория',
 		);
 	}
 
@@ -131,12 +133,35 @@ class Post extends CActiveRecord
         $this->tags = Tag::array2string(array_unique(Tag::string2array($this->tags)));
     }
 
+    /**
+     * @return mixed
+     */
     public function getUrl()
     {
         return Yii::app()->createUrl('post/view', array(
            'id' => $this->id,
            'title' => $this->title,
         ));
+    }
+
+    /**
+     * @return bool
+     */
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            if($this->isNewRecord)
+            {
+                $this->create_time=$this->update_time=time();
+                $this->author_id=Yii::app()->user->id;
+            }
+            else
+                $this->update_time=time();
+            return true;
+        }
+        else
+            return false;
     }
 
 	/**

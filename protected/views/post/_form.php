@@ -38,28 +38,43 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-		<?php echo $form->error($model,'status'); ?>
+        <?php echo $form->dropDownList($model,'status',Lookup::items('PostStatus')); ?>
+<!--		--><?php //echo $form->labelEx($model,'status'); ?>
+<!--		--><?php //echo $form->textField($model,'status'); ?>
+<!--		--><?php //echo $form->error($model,'status'); ?>
+	</div>
+
+<!--	<div class="row">
+		<?php /*echo $form->labelEx($model,'create_time'); */?>
+		<?php /*echo $form->textField($model,'create_time'); */?>
+		<?php /*echo $form->error($model,'create_time'); */?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'create_time'); ?>
-		<?php echo $form->textField($model,'create_time'); ?>
-		<?php echo $form->error($model,'create_time'); ?>
+		<?php /*echo $form->labelEx($model,'update_time'); */?>
+		<?php /*echo $form->textField($model,'update_time'); */?>
+		<?php /*echo $form->error($model,'update_time'); */?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'update_time'); ?>
-		<?php echo $form->textField($model,'update_time'); ?>
-		<?php echo $form->error($model,'update_time'); ?>
-	</div>
+		<?php /*echo $form->labelEx($model,'author_id'); */?>
+		<?php /*echo $form->textField($model,'author_id'); */?>
+		<?php /*echo $form->error($model,'author_id'); */?>
+	</div>-->
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'author_id'); ?>
-		<?php echo $form->textField($model,'author_id'); ?>
-		<?php echo $form->error($model,'author_id'); ?>
-	</div>
+    <div class="row">
+        <?php
+            echo $form->labelEx($model,'category_id');
+            $data = CHtml::listData(Category::model()->findAll(), 'id', 'name');
+            $htmlOptions =     array('size' => '1', 'prompt'=>'-- Выберите категорию --', );
+            echo $form->listBox($model,'category_id', $data, $htmlOptions);
+            echo $form->error($model,'category_id');
+        ?>
+<!--        --><?php //echo $form->dropDownListEx($model,'category_id', CHtml::dropDownList(Category::model()->findAll()), 'id', 'name'); ?>
+<!--        --><?php //echo $form->labelEx($model,'category_id'); ?>
+<!--        --><?php //echo $form->textField($model,'category_id'); ?>
+<!--        --><?php //echo $form->error($model,'category_id'); ?>
+    </div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>
