@@ -19,6 +19,10 @@
  */
 class Post extends CActiveRecord
 {
+    const STATUS_DRAFT = 1;
+    const STATUS_PUBLISHED = 2;
+    const STATUS_ARCHIVED = 3;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -35,13 +39,17 @@ class Post extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, content, status, author_id', 'required'),
-			array('status, create_time, update_time, author_id', 'numerical', 'integerOnly'=>true),
-			array('title', 'length', 'max'=>128),
-			array('tags', 'safe'),
+			array('title, content, status', 'required'),
+			array('title', 'length', 'max'=>128,
+                'message'=>'Длина заголовка не должна превышать 128 символов.'),
+            array('status', 'in', 'range'=>array(1,2,3),
+                'message'=>'Статус должен быть в диапазоне от 1 до 3.'),
+            array('tags', 'match', 'pattern'=>'/^[\p{L}\s,]+$/u',
+                'message'=>'В тегах можно использовать только буквы и знак разделения тегов ,'),
+            array('tags', 'normalizeTags'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, content, tags, status, create_time, update_time, author_id', 'safe', 'on'=>'search'),
+			array('title, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,8 +61,14 @@ class Post extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'comments' => array(self::HAS_MANY, 'Comment', 'post_id'),
+			'comments' => array(self::HAS_MANY, 'Comment', 'post_id',
+                'condition' => 'comments.status='.Comment::STATUS_APPROVED,
+                'order' => 'comments.create_time DESC'
+            ),
+            'commentCount' => array(self::STAT, 'Comment', 'post_id', 'condition'=>'status='.Comment::STATUS_APPROVED),
 			'author' => array(self::BELONGS_TO, 'User', 'author_id'),
+            'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
+            'categoryCount' => array(self::STAT, 'Category', 'category_id'),
 		);
 	}
 
@@ -65,13 +79,13 @@ class Post extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
-			'content' => 'Content',
-			'tags' => 'Tags',
-			'status' => 'Status',
-			'create_time' => 'Create Time',
-			'update_time' => 'Update Time',
-			'author_id' => 'Author',
+			'title' => 'Заголовок',
+			'content' => 'Содержимое',
+			'tags' => 'Теги',
+			'status' => 'Статус',
+			'create_time' => 'Дата создания',
+			'update_time' => 'Дата обновления',
+			'author_id' => 'Автор',
 		);
 	}
 
@@ -106,6 +120,24 @@ class Post extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    /**
+     * @param $attribute
+     * @param $params
+     * @return normalize tags without spaces
+     */
+    public function normalizeTags($attribute, $params)
+    {
+        $this->tags = Tag::array2string(array_unique(Tag::string2array($this->tags)));
+    }
+
+    public function getUrl()
+    {
+        return Yii::app()->createUrl('post/view', array(
+           'id' => $this->id,
+           'title' => $this->title,
+        ));
+    }
 
 	/**
 	 * Returns the static model of the specified AR class.

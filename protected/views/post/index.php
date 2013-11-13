@@ -3,12 +3,12 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Posts',
+	'Записи',
 );
 
 $this->menu=array(
-	array('label'=>'Create Post', 'url'=>array('create')),
-	array('label'=>'Manage Post', 'url'=>array('admin')),
+	array('label'=>'Создание Записи', 'url'=>array('create')),
+	array('label'=>'Управление Записями', 'url'=>array('admin')),
 );
 ?>
 

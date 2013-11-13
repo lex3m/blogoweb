@@ -35,6 +35,20 @@ class Tag extends CActiveRecord
 		);
 	}
 
+    /**
+     * @param $tags
+     * @return array
+     */
+    public function string2array($sTags)
+    {
+        return preg_split('/\s*,\s*/', trim($sTags), -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    public function array2string($aTags)
+    {
+        return implode(',', $aTags);
+    }
+
 	/**
 	 * @return array relational rules.
 	 */

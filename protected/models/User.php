@@ -23,6 +23,24 @@ class User extends CActiveRecord
 		return '{{user}}';
 	}
 
+    /**
+     * @param $password
+     * @return verified password
+     */
+    public function validatePassword($password)
+    {
+        return CPasswordHelper::verifyPassword($password, $this->password);
+    }
+
+    /**
+     * @param $password
+     * @return hashed password
+     */
+    public function hashPassword($password)
+    {
+        return CPasswordHelper::hashPassword($password);
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
