@@ -45,16 +45,23 @@ $('.search-form form').submit(function(){
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'title',
-		'content',
-		'tags',
-		'status',
-		'create_time',
-		/*
-		'update_time',
-		'author_id',
-		*/
+        array(
+            'name'=>'title',
+            'type'=>'raw',
+            'value'=>'CHtml::link(CHtml::encode($data->title), $data->url)'
+        ),
+        array(
+            'name'=>'status',
+            'value'=>'Lookup::item("PostStatus",$data->status)',
+            'filter'=>Lookup::items('PostStatus'),
+        ),
+        'category.name',
+        'tags',
+        array(
+            'name'=>'create_time',
+            'value'=>'date("d/m/Y в H:i", $data->create_time)',
+            'filter'=>false,
+        ),
 		array(
 			'class'=>'CButtonColumn',
 		),

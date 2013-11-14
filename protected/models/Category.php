@@ -87,7 +87,79 @@ class Category extends CActiveRecord
 		));
 	}
 
-	/**
+    /**
+     * @param $level
+     * @return string
+     */
+    private function _makeNbsp($level)
+    {
+        $str = '';
+        for ($i = 0; $i < $level; $i++)
+        {
+            $str .= ' - ';
+        }
+
+        return $str;
+    }
+
+    private static $_items = array();
+
+    /**
+     * @param $parentID
+     * @param $lvl
+     * @param $tag
+     */
+    private static function makeTree($parentID, $lvl)
+    {
+
+        $categories = self::model()->findAll(
+            array(
+                'condition'=>'parent_cat_id=:parentID',
+                'params'=>array(':parentID'=>$parentID),
+                'order'=>'name',
+            )
+        );
+
+        foreach ($categories as $category) {
+            $id = $category->id;
+            $lvl++;
+            self::$_items[$category->id] = self::_makeNbsp($lvl) . $category->name;
+            // echo "<option value=".$id.">". self::_makeNbsp($lvl) . $category->name . "</option>";
+            self::makeTree($id, $lvl);
+            $lvl--;
+        }
+        /*
+        $connection = Yii::app()->db;
+
+        $sql = "SELECT id,name FROM tbl_category WHERE parent_cat_id=".intval($parentID)." ORDER BY name";
+
+        $command = $connection->createCommand($sql);
+
+        $dataReader = $command->query();
+
+        while (($row = $dataReader->read()) !== false) {
+            $id = $row["id"];
+            $lvl++;
+            echo "<".$tag." value=".$row['id'].">". self::_makeNbsp($lvl) . $row["name"] . "</".$tag.">";
+            self::showTree($id, $lvl, $tag);
+            $lvl--;
+        }
+        */
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTree()
+    {
+        if (empty(self::$_items))
+             self::makeTree(0, 0);
+
+        return self::$_items;
+    }
+
+
+    /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.

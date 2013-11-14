@@ -36,6 +36,15 @@ Yii::app()->clientScript->registerScript('post-form', "
 
 	<?php echo $form->errorSummary($model); ?>
 
+    <div class="row">
+        <?php
+            echo $form->labelEx($model,'category_id');
+            echo $form->dropDownList($model, 'category_id', Category::getTree(), array('prompt' => '< Выберите категорию >',
+                                             //'options' => array( 3 => array('selected'=>'selected'))
+            ));
+            echo $form->error($model,'category_id');
+        ?>
+    </div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
 		<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>128)); ?>
@@ -62,37 +71,7 @@ Yii::app()->clientScript->registerScript('post-form', "
 <!--		--><?php //echo $form->error($model,'status'); ?>
 	</div>
 
-<!--	<div class="row">
-		<?php /*echo $form->labelEx($model,'create_time'); */?>
-		<?php /*echo $form->textField($model,'create_time'); */?>
-		<?php /*echo $form->error($model,'create_time'); */?>
-	</div>
 
-	<div class="row">
-		<?php /*echo $form->labelEx($model,'update_time'); */?>
-		<?php /*echo $form->textField($model,'update_time'); */?>
-		<?php /*echo $form->error($model,'update_time'); */?>
-	</div>
-
-	<div class="row">
-		<?php /*echo $form->labelEx($model,'author_id'); */?>
-		<?php /*echo $form->textField($model,'author_id'); */?>
-		<?php /*echo $form->error($model,'author_id'); */?>
-	</div>-->
-
-    <div class="row">
-        <?php
-            echo $form->labelEx($model,'category_id');
-            $data = CHtml::listData(Category::model()->findAll(), 'id', 'name');
-            $htmlOptions =     array('size' => '1', 'prompt'=>'-- Выберите категорию --', );
-            echo $form->listBox($model,'category_id', $data, $htmlOptions);
-            echo $form->error($model,'category_id');
-        ?>
-<!--        --><?php //echo $form->dropDownListEx($model,'category_id', CHtml::dropDownList(Category::model()->findAll()), 'id', 'name'); ?>
-<!--        --><?php //echo $form->labelEx($model,'category_id'); ?>
-<!--        --><?php //echo $form->textField($model,'category_id'); ?>
-<!--        --><?php //echo $form->error($model,'category_id'); ?>
-    </div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>

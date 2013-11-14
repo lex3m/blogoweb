@@ -24,6 +24,8 @@ class Post extends CActiveRecord
     const STATUS_PUBLISHED = 2;
     const STATUS_ARCHIVED = 3;
 
+    private $_oldTags;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -145,6 +147,17 @@ class Post extends CActiveRecord
     }
 
     /**
+     * @return array a list of links that point to the post list filtered by every tag of this post
+     */
+    public function getTagLinks()
+    {
+        $links=array();
+        foreach(Tag::string2array($this->tags) as $tag)
+            $links[]=CHtml::link(CHtml::encode($tag), array('post/index', 'tag'=>$tag));
+        return $links;
+    }
+
+    /**
      * @return bool
      */
     protected function beforeSave()
@@ -173,12 +186,24 @@ class Post extends CActiveRecord
         Tag::model()->updateFrequency($this->_oldTags, $this->tags);
     }
 
-    private $_oldTags;
 
+    /**
+     * This is invoked after loaded result
+     */
     protected function afterFind()
     {
         parent::afterFind();
         $this->_oldTags = $this->tags;
+    }
+
+    /**
+     * This is invoked after the record is deleted.
+     */
+    protected function afterDelete()
+    {
+        parent::afterDelete();
+        Comment::model()->deleteAll('post_id='.$this->id);
+        Tag::model()->updateFrequency($this->tags, '');
     }
 
 	/**
