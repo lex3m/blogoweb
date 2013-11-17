@@ -55,8 +55,7 @@ class Category extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'description' => 'Description',
+			'name' => 'Категория',
 		);
 	}
 
@@ -91,7 +90,7 @@ class Category extends CActiveRecord
      * @param $level
      * @return string
      */
-    private function _makeNbsp($level)
+    private static function _makeNbsp($level)
     {
         $str = '';
         for ($i = 0; $i < $level; $i++)
@@ -107,7 +106,6 @@ class Category extends CActiveRecord
     /**
      * @param $parentID
      * @param $lvl
-     * @param $tag
      */
     private static function makeTree($parentID, $lvl)
     {

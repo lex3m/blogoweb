@@ -55,8 +55,9 @@ $('.search-form form').submit(function(){
             'value'=>'Lookup::item("PostStatus",$data->status)',
             'filter'=>Lookup::items('PostStatus'),
         ),
-        'category.name',
         'tags',
+        'category.name',
+        'author.username',
         array(
             'name'=>'create_time',
             'value'=>'date("d/m/Y в H:i", $data->create_time)',

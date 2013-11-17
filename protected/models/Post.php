@@ -122,6 +122,9 @@ class Post extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'pagination'=>array(
+                'pageSize'=>Yii::app()->params['onPage'],
+            ),
 		));
 	}
 
@@ -197,13 +200,44 @@ class Post extends CActiveRecord
     }
 
     /**
+     * @return Db connection type or false if it is undefined
+     */
+    private function getDbConnectionType()
+    {
+        $str = Yii::app()->db->connectionString;
+        $arr = explode(':', $str);
+        if (!empty($arr))
+            return $arr[0];
+        else
+            return false;
+    }
+
+    /**
      * This is invoked after the record is deleted.
      */
     protected function afterDelete()
     {
         parent::afterDelete();
-        Comment::model()->deleteAll('post_id='.$this->id);
+        if (!$this->getDbConnectionType() ||
+            $this->getDbConnectionType() != 'mysql' ||
+            $this->getDbConnectionType() != 'pgsql') {
+                Comment::model()->deleteAll('post_id='.$this->id);
+        }
         Tag::model()->updateFrequency($this->tags, '');
+    }
+
+    /**
+     * @param $comment
+     * @return comment saved object
+     */
+    public function addComment($comment)
+    {
+        if(Yii::app()->params['commentNeedApproval'])
+            $comment->status=Comment::STATUS_PENDING;
+        else
+            $comment->status=Comment::STATUS_APPROVED;
+        $comment->post_id=$this->id;
+        return $comment->save();
     }
 
 	/**

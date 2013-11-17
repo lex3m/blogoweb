@@ -52,10 +52,35 @@ class PostController extends Controller
 	public function actionView()
 	{
         $post = $this->loadModel();
+        $comment = $this->newComment($post);
+
 		$this->render('view',array(
 			'model'=> $post,
+            'comment'=> $comment,
 		));
 	}
+
+    /**
+     * Adding new comment to post
+     */
+    protected function newComment($post)
+    {
+        $comment = new Comment;
+        if(isset($_POST['ajax']) && $_POST['ajax']==='comment-form')
+        {
+            echo CActiveForm::validate($comment);
+            Yii::app()->end();
+        }
+        if (isset($_POST['Comment'])) {
+            $comment->attributes = $_POST['Comment'];
+            if ($post->addComment($comment)) {
+                if ($comment->status = Comment::STATUS_PENDING)
+                    Yii::app()->user->setFlash('commentSubmitted', 'Спасибо, Ваш комментарий будет добавлен после проверки и подтверждения.');
+                $this->refresh();
+            }
+        }
+        return $comment;
+    }
 
 	/**
 	 * Creates a new model.
@@ -111,11 +136,15 @@ class PostController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel()->delete();
+        if (Yii::app()->request->isPostRequest) {
+            $this->loadModel()->delete();
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            if(!isset($_GET['ajax']))
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        } else {
+            throw new CHttpException(400,'Некорректный запрос. Пожалуйста, не повторяйте больше этот запрос.');
+        }
 	}
 
 	/**
@@ -133,7 +162,7 @@ class PostController extends Controller
 
 		$dataProvider=new CActiveDataProvider('Post', array (
                 'pagination'=>array(
-                    'pageSize'=>5,
+                    'pageSize'=>Yii::app()->params['onPage'],
                 ),
                 'criteria'=>$criteria,
             )

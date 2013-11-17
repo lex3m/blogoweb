@@ -67,8 +67,8 @@ class Tag extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'frequency' => 'Frequency',
+			'name' => 'Название',
+			'frequency' => 'Частота',
 		);
 	}
 

@@ -18,6 +18,9 @@
         ?>
     </div>
     <div class="nav">
+        <b>Категория:</b>
+        <?php echo $data->category->name; ?>
+        <br/>
         <b>Теги:</b>
         <?php echo implode(', ', $data->tagLinks); ?>
         <br/>

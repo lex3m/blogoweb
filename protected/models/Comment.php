@@ -36,9 +36,10 @@ class Comment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content, status, author, email, post_id', 'required'),
-			array('status, create_time, post_id', 'numerical', 'integerOnly'=>true),
+			array('content, author, email', 'required'),
 			array('author, email, url', 'length', 'max'=>128),
+            array('email', 'email'),
+            array('url','url'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, content, status, create_time, author, email, url, post_id', 'safe', 'on'=>'search'),
@@ -64,15 +65,53 @@ class Comment extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'content' => 'Content',
-			'status' => 'Status',
-			'create_time' => 'Create Time',
-			'author' => 'Author',
-			'email' => 'Email',
-			'url' => 'Url',
-			'post_id' => 'Post',
+			'content' => 'Содержание',
+			'status' => 'Статус',
+			'create_time' => 'Дата создания',
+			'author' => 'Автор',
+			'email' => 'E-mail',
+			'url' => 'Веб-сайт',
+			'post_id' => 'Запись',
 		);
 	}
+
+    /**
+     * @return bool
+     */
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            if($this->isNewRecord)
+                $this->create_time=time();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /**
+     * @param Post the post that this comment belongs to. If null, the method
+     * will query for the post.
+     * @return string the permalink URL for this comment
+     */
+    public function getUrl($post=null)
+    {
+        if($post===null)
+            $post=$this->post;
+        return $post->url.'#c'.$this->id;
+    }
+
+    /**
+     * @return string the hyperlink display for the current comment's author
+     */
+    public function getAuthorLink()
+    {
+        if(!empty($this->url))
+            return CHtml::link(CHtml::encode($this->author),$this->url);
+        else
+            return CHtml::encode($this->author);
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
