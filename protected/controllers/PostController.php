@@ -33,7 +33,7 @@ class PostController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 //				'actions'=>array('create','update'),
-				'users'=>array('@'),
+				'users'=>array('admin'),
 			),
 			/*array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
@@ -74,7 +74,7 @@ class PostController extends Controller
         if (isset($_POST['Comment'])) {
             $comment->attributes = $_POST['Comment'];
             if ($post->addComment($comment)) {
-                if ($comment->status = Comment::STATUS_PENDING)
+                if ($comment->status == Comment::STATUS_PENDING && Yii::app()->params['commentNeedApproval'])
                     Yii::app()->user->setFlash('commentSubmitted', 'Спасибо, Ваш комментарий будет добавлен после проверки и подтверждения.');
                 $this->refresh();
             }
@@ -143,7 +143,7 @@ class PostController extends Controller
             if(!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else {
-            throw new CHttpException(400,'Некорректный запрос. Пожалуйста, не повторяйте больше этот запрос.');
+            throw new CHttpException(400,'Некорректный запрос.');
         }
 	}
 
@@ -159,6 +159,9 @@ class PostController extends Controller
         ));
         if(isset($_GET['tag']))
             $criteria->addSearchCondition('tags',$_GET['tag']);
+
+        if(isset($_GET['category_id']))
+            $criteria->addSearchCondition('category_id', intval($_GET['category_id']));
 
 		$dataProvider=new CActiveDataProvider('Post', array (
                 'pagination'=>array(

@@ -65,13 +65,14 @@ class Comment extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'content' => 'Содержание',
+			'content' => 'Комментарий',
 			'status' => 'Статус',
 			'create_time' => 'Дата создания',
 			'author' => 'Автор',
 			'email' => 'E-mail',
 			'url' => 'Веб-сайт',
 			'post_id' => 'Запись',
+            'category_id' => 'Категория',
 		);
 	}
 
@@ -113,6 +114,13 @@ class Comment extends CActiveRecord
             return CHtml::encode($this->author);
     }
 
+    public function approve()
+    {
+        $this->status = self::STATUS_APPROVED;
+        $this->update(array('status'));
+    }
+
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -131,19 +139,39 @@ class Comment extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
 		$criteria->compare('content',$this->content,true);
 		$criteria->compare('status',$this->status);
-		$criteria->compare('create_time',$this->create_time);
 		$criteria->compare('author',$this->author,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('url',$this->url,true);
-		$criteria->compare('post_id',$this->post_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'pagination'=>array(
+                'pageSize'=>Yii::app()->params['onPage'],
+            ),
 		));
 	}
+
+    /**
+     * @return integer the number of comments that are pending approval
+     */
+    public function getPendingCommentCount()
+    {
+        return $this->count('status='.self::STATUS_PENDING);
+    }
+
+    /**
+     *
+     */
+    public function findRecentComments($limit=10)
+    {
+        return $this->with('post')->findAll(
+            array(
+                'condition'=>'t.status='.self::STATUS_APPROVED,
+                'order'=>'t.create_time DESC',
+                'limit'=>intval($limit),
+            )
+        );
+    }
 
 	/**
 	 * Returns the static model of the specified AR class.

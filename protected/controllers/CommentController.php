@@ -27,56 +27,14 @@ class CommentController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','index','update','approve'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$model=new Comment;
-
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		if(isset($_POST['Comment']))
-		{
-			$model->attributes=$_POST['Comment'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
 	}
 
 	/**
@@ -95,7 +53,7 @@ class CommentController extends Controller
 		{
 			$model->attributes=$_POST['Comment'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
@@ -122,7 +80,15 @@ class CommentController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Comment');
+		$dataProvider=new CActiveDataProvider('Comment', array(
+            'criteria'=>array(
+                'with'=>'post',
+                'order'=>'t.status, t.create_time DESC',
+            ),
+            'pagination'=>array(
+                'pageSize'=>Yii::app()->params['onPage'],
+            ),
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -143,6 +109,21 @@ class CommentController extends Controller
 		));
 	}
 
+    /**
+     * @param $id
+     * @return approved comments or http exception if it not found
+     */
+    public function actionApprove($id)
+    {
+        if (Yii::app()->request->isPostRequest) {
+            $comment = $this->loadModel($id);
+            $comment->approve();
+            $this->redirect(array('index'));
+        } else {
+            throw new CHttpException(400, 'Некорректный запрос.');
+        }
+    }
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -150,13 +131,14 @@ class CommentController extends Controller
 	 * @return Comment the loaded model
 	 * @throws CHttpException
 	 */
-	public function loadModel($id)
-	{
-		$model=Comment::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
-		return $model;
-	}
+
+    public function loadModel($id)
+    {
+        $model=Comment::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'Запрашиваемая страница не найдена к комментариях.');
+        return $model;
+    }
 
 	/**
 	 * Performs the AJAX validation.

@@ -88,7 +88,8 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'lex24@ukr.net',
-        'onPage'=>10,
+        'onPage'=>5,
         'commentNeedApproval'=>true,
+        'tagCloudCount'=>20,
 	),
 );

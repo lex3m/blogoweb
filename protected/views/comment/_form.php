@@ -46,7 +46,7 @@
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Отправить' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Отправить' : 'Сохранить'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

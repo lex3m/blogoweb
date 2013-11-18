@@ -17,6 +17,10 @@ $this->menu=array(
     <h1>Записи с тегом <i><?php echo CHtml::encode($_GET['tag']); ?></i></h1>
 <?php endif; ?>
 
+<?php if(!empty($_GET['category_id'])): ?>
+    <h1>Категория <i><?php echo Category::getCategoryById($_GET['category_id']); ?></i></h1>
+<?php endif; ?>
+
 <?php $this->widget('zii.widgets.CListView', array(
     'dataProvider'=>$dataProvider,
     'itemView'=>'_view',

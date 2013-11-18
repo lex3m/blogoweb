@@ -17,8 +17,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Просмотр Записи #<?php echo $model->id; ?></h1>
-
 <?php $this->renderPartial('_view', array(
     'data'=>$model,
 )); ?>

@@ -3,60 +3,65 @@
 /* @var $model Comment */
 
 $this->breadcrumbs=array(
-	'Comments'=>array('index'),
-	'Manage',
+	'Комментарии'=>array('index'),
+	'Управление',
 );
 
 $this->menu=array(
-	array('label'=>'List Comment', 'url'=>array('index')),
-	array('label'=>'Create Comment', 'url'=>array('create')),
+	array('label'=>'Список Комментариев', 'url'=>array('index')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#comment-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 ?>
 
-<h1>Manage Comments</h1>
+<h1>Управление Комментариями</h1>
 
 <p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+    Можно использовать оператор сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
+    или <b>=</b>) в начале каждой строки запроса для уточнения параметоров запроса.
 </p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'comment-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-	'columns'=>array(
-		'id',
-		'content',
-		'status',
-		'create_time',
-		'author',
-		'email',
-		/*
-		'url',
-		'post_id',
-		*/
-		array(
-			'class'=>'CButtonColumn',
-		),
+    'columns'=>array(
+        array(
+            'name'=>'id',
+            'type'=>'raw',
+            'filter'=>false,
+        ),
+        array(
+            'name'=>'content',
+            'type'=>'raw',
+            'value'=>'CHtml::encode(substr($data->content, 0, 50))'
+        ),
+        array(
+            'name'=>'status',
+            'value'=>'Lookup::item("CommentStatus",$data->status)',
+            'filter'=>Lookup::items('CommentStatus'),
+        ),
+        array(
+            'name'=>'author',
+            'type'=>'raw',
+        ),
+        array(            // display 'author.username' using an expression
+            'name'=>'post_id',
+            'value'=>'$data->post->title',
+            'filter'=>false,
+        ),
+        array(            // display 'author.username' using an expression
+            'name'=>'category_id',
+            'value'=>'$data->post->category->name',
+            'filter'=>false,
+        ),
+        array(
+            'name'=>'create_time',
+            'value'=>'date("d/m/Y в H:i", $data->create_time)',
+            'filter'=>false,
+        ),
+        array(
+            'class'=>'CButtonColumn',
+            'template' => '{update} {delete}',
+        ),
 	),
 )); ?>

@@ -3,41 +3,53 @@
 /* @var $data Comment */
 ?>
 
-<div class="view">
+<?php
+$deleteJS = <<<DEL
+$('.container').on('click','.time a.delete',function() {
+	var th=$(this),
+		container=th.closest('div.comment'),
+		id=container.attr('id').slice(1);
+	if(confirm('Вы уверены, что хочете удалить комментарий  #'+id+'?')) {
+		$.ajax({
+			url:th.attr('href'),
+			type:'POST'
+		}).done(function(){container.slideUp()});
+	}
+	return false;
+});
+DEL;
+Yii::app()->getClientScript()->registerScript('delete', $deleteJS);
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+?>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('content')); ?>:</b>
-	<?php echo CHtml::encode($data->content); ?>
-	<br />
+<div class="comment" id="c<?php echo $data->id; ?>">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
-	<br />
+    <?php echo CHtml::link("#{$data->id}", $data->url, array(
+        'class'=>'cid',
+        'title'=>'Ссылка на комментарий',
+    )); ?>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('create_time')); ?>:</b>
-	<?php echo CHtml::encode($data->create_time); ?>
-	<br />
+    <div class="author">
+        <?php echo $data->authorLink; ?> оставил(-а) комментарий в записи
+        <?php echo CHtml::link(CHtml::encode($data->post->title), $data->post->url); ?>
+        категории
+        <?php echo CHtml::link(CHtml::encode($data->post->category->name), $data->post->category->url); ?>
+    </div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('author')); ?>:</b>
-	<?php echo CHtml::encode($data->author); ?>
-	<br />
+    <div class="time">
+        <?php if($data->status==Comment::STATUS_PENDING): ?>
+            <span class="pending">Ожидает подтверждения</span> |
+            <?php echo CHtml::linkButton('Подтвердить', array(
+                'submit'=>array('comment/approve','id'=>$data->id),
+            )); ?> |
+        <?php endif; ?>
+        <?php echo CHtml::link('Редактировать',array('comment/update','id'=>$data->id)); ?> |
+        <?php echo CHtml::link('Удалить',array('comment/delete','id'=>$data->id),array('class'=>'delete')); ?> |
+        <?php echo date('d/m/Y в H:i',$data->create_time); ?>
+    </div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
-	<?php echo CHtml::encode($data->email); ?>
-	<br />
+    <div class="content">
+        <?php echo nl2br(CHtml::encode($data->content)); ?>
+    </div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('url')); ?>:</b>
-	<?php echo CHtml::encode($data->url); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('post_id')); ?>:</b>
-	<?php echo CHtml::encode($data->post_id); ?>
-	<br />
-
-	*/ ?>
-
-</div>
+</div><!-- comment -->

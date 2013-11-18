@@ -156,7 +156,24 @@ class Category extends CActiveRecord
         return self::$_items;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return Yii::app()->createUrl('post/index', array(
+            'category_id' => $this->id,
+        ));
+    }
 
+    public function getCategoryById($id)
+    {
+        $category = self::model()->findByPk($id);
+        if($category===null)
+            throw new CHttpException(404,'Данная категория не найдена.');
+        return $category->name;
+
+    }
     /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
