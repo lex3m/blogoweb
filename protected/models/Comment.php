@@ -160,7 +160,7 @@ class Comment extends CActiveRecord
     }
 
     /**
-     *
+     * return object wth recent comments in limit
      */
     public function findRecentComments($limit=10)
     {
