@@ -42,8 +42,13 @@ return array(
             'showScriptName' => false, //hide index.php from url
 			'urlFormat'=>'path',
 			'rules'=>array(
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                'post/<id:\d+>/<title:.*?>'=>'post/view',
+                'post/view/<id:\d+>'=>'post/view',
+                'posts/<tag:.*?>'=>'post/index',
+                'post/update/<id:\d+>'=>'post/update',
+                'comment/update/<id:\d+>'=>'comment/update',
+//				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+//				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
@@ -91,5 +96,6 @@ return array(
         'onPage'=>5,
         'commentNeedApproval'=>true,
         'tagCloudCount'=>20,
+        'recentCommentCount'=>10,
 	),
 );

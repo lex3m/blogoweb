@@ -126,23 +126,6 @@ class Category extends CActiveRecord
             self::makeTree($id, $lvl);
             $lvl--;
         }
-        /*
-        $connection = Yii::app()->db;
-
-        $sql = "SELECT id,name FROM tbl_category WHERE parent_cat_id=".intval($parentID)." ORDER BY name";
-
-        $command = $connection->createCommand($sql);
-
-        $dataReader = $command->query();
-
-        while (($row = $dataReader->read()) !== false) {
-            $id = $row["id"];
-            $lvl++;
-            echo "<".$tag." value=".$row['id'].">". self::_makeNbsp($lvl) . $row["name"] . "</".$tag.">";
-            self::showTree($id, $lvl, $tag);
-            $lvl--;
-        }
-        */
     }
 
     /**
@@ -154,6 +137,34 @@ class Category extends CActiveRecord
              self::makeTree(0, 0);
 
         return self::$_items;
+    }
+
+    public function getMenu($pid, $level)
+    {
+
+        $categories = self::model()->findAll(
+            array(
+                'condition'=>'parent_cat_id=:parentID',
+                'params'=>array(':parentID'=>$pid),
+                'order'=>'name',
+            )
+        );
+        if ($level == 0)
+            echo "<ul id='left-menu'>";
+        else
+            echo "<ul>";
+        foreach ($categories as $category) {
+            $level++;
+            $id = $category->id;
+            echo "<li>";
+            echo CHtml::link($category->name, Yii::app()->createUrl('post/index', array(
+                'category_id' => $category->id,
+            )));
+            self::getMenu($id, $level);
+            $level--;
+        }
+        echo "</ul>";
+
     }
 
     /**

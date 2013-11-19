@@ -10,6 +10,7 @@ $this->menu=array(
 	array('label'=>'Создание Записи', 'url'=>array('create')),
 	array('label'=>'Управление Записями', 'url'=>array('admin')),
 );
+
 ?>
 
 

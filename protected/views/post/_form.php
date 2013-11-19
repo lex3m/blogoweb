@@ -22,7 +22,6 @@ Yii::app()->clientScript->registerScript('post-form', "
 ?>
 
 <div class="form">
-    <!--<textarea id="contents"></textarea>-->
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'post-form',
 	// Please note: When you enable ajax validation, make sure the corresponding

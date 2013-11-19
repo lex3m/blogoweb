@@ -1,7 +1,10 @@
-<?php /* @var $this Controller */ ?>
+<?php ///* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/main'); ?>
 <div class="span-5 first">
-    <?php if(!Yii::app()->user->isGuest) $this->widget('UserMenu'); ?>
+    <div id="sidebar">
+        <?php //$this->widget('CategoryMenu');?>
+        <?php Category::getMenu(0,0); ?>
+    </div>
 </div>
 <div class="span-14">
 	<div id="content">
@@ -10,20 +13,28 @@
 </div>
 <div class="span-5 last">
 	<div id="sidebar">
-	<?php
-        if(!Yii::app()->user->isGuest) {
-            $this->beginWidget('zii.widgets.CPortlet', array(
-                'title'=>'Операции',
-            ));
+        <?php if(!Yii::app()->user->isGuest) $this->widget('UserMenu'); ?>
+        <?php $this->widget('TagCloud', array('maxTags'=>Yii::app()->params['tagCloudCount']));?>
+        <?php $this->widget('RecentComments', array('maxComments'=>Yii::app()->params['recentCommentCount']));?>
+        <?php
+//            $this->beginWidget('zii.widgets.CPortlet', array(
+//                'title'=>'Меню',
+//            ));
             $this->widget('zii.widgets.CMenu', array(
                 'items'=>array(
-                    array('label'=>'Список Записей', 'url'=>array('index')),
+                    // Important: you need to specify url as 'controller/action',
+                    // not just as 'controller' even if default acion is used.
+                    array('label'=>'Home', 'url'=>array('site/index')),
+                    // 'Products' menu item will be selected no matter which tag parameter value is since it's not specified.
+                    array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
+                        array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+                        array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
+                    )),
+                    array('label'=>'Login', 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),
                 ),
-                'htmlOptions'=>array('class'=>'operations'),
             ));
-            $this->endWidget();
-        }
-	?>
+//            $this->endWidget();
+        ?>
 	</div><!-- sidebar -->
 </div>
 <?php $this->endContent(); ?>
