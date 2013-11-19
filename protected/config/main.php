@@ -45,6 +45,7 @@ return array(
                 'post/<id:\d+>/<title:.*?>'=>'post/view',
                 'post/view/<id:\d+>'=>'post/view',
                 'posts/<tag:.*?>'=>'post/index',
+                'post/category/<category_id:\d+>/<name:.*?>'=>'post/index',
                 'post/update/<id:\d+>'=>'post/update',
                 'comment/update/<id:\d+>'=>'comment/update',
 //				'<controller:\w+>/<id:\d+>'=>'<controller>/view',

@@ -139,7 +139,7 @@ class Category extends CActiveRecord
         return self::$_items;
     }
 
-    public function getMenu($pid, $level)
+    public static function getMenu($pid, $level)
     {
 
         $categories = self::model()->findAll(
@@ -159,6 +159,7 @@ class Category extends CActiveRecord
             echo "<li>";
             echo CHtml::link($category->name, Yii::app()->createUrl('post/index', array(
                 'category_id' => $category->id,
+                'name' => $category->name,
             )));
             self::getMenu($id, $level);
             $level--;
@@ -177,7 +178,7 @@ class Category extends CActiveRecord
         ));
     }
 
-    public function getCategoryById($id)
+    public static function getCategoryById($id)
     {
         $category = self::model()->findByPk($id);
         if($category===null)
