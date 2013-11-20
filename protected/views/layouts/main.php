@@ -31,9 +31,9 @@
 	<div id="mainmenu">
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
-				array('label'=>'Главная', 'url'=>array('/site/index')),
-                array('label'=>'Записи', 'url'=>array('/post/index')),
-				array('label'=>'О нас', 'url'=>array('/site/page', 'view'=>'about')),
+				array('label'=>'Главная', 'url'=>array('/post/index')),
+//                array('label'=>'Записи', 'url'=>array('/post/index')),
+//				array('label'=>'О нас', 'url'=>array('/site/page', 'view'=>'about')),
 				array('label'=>'Обратная связь', 'url'=>array('/site/contact')),
 				array('label'=>'Авторизация', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Выход ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)

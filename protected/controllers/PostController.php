@@ -16,6 +16,15 @@ class PostController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
+            /*array(
+                'COutputCache + index',
+                'duration'=>10,
+                'varyByParam'=>array('id'),
+            ),*/
+            /*array(
+                'CHttpCacheFilter + index', //caching page by http with action index
+                'lastModified'=>Yii::app()->db->createCommand("SELECT MAX(`update_time`) FROM {{post}}")->queryScalar(),
+            ),*/
 		);
 	}
 
@@ -88,6 +97,7 @@ class PostController extends Controller
 	 */
 	public function actionCreate()
 	{
+        $this->layout='//layouts/column2';
 		$model=new Post;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -112,6 +122,7 @@ class PostController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+        $this->layout='//layouts/column2';
 		$model=$this->loadModel();
 
 		// Uncomment the following line if AJAX validation is needed
@@ -180,6 +191,7 @@ class PostController extends Controller
 	 */
 	public function actionAdmin()
 	{
+        $this->layout='//layouts/column2';
 		$model=new Post('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Post']))

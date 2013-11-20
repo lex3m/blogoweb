@@ -1,7 +1,6 @@
 <?php ///* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/main'); ?>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <!--        <link href="--><?php //echo Yii::app()->request->baseUrl; ?><!--/css/dcaccordion.css" rel="stylesheet" type="text/css" />-->
 <!--        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
@@ -36,7 +35,9 @@
 <div class="span-5 last">
 	<div id="sidebar">
         <?php if(!Yii::app()->user->isGuest) $this->widget('UserMenu'); ?>
-        <?php $this->widget('TagCloud', array('maxTags'=>Yii::app()->params['tagCloudCount']));?>
+        <?php if($this->beginCache('tagCloud', array('duration'=>3600))) {?>
+            <?php $this->widget('TagCloud', array('maxTags'=>Yii::app()->params['tagCloudCount']));?>
+        <?php $this->endCache(); } ?>
         <?php $this->widget('RecentComments', array('maxComments'=>Yii::app()->params['recentCommentCount']));?>
         <?php
 //            $this->beginWidget('zii.widgets.CPortlet', array(
@@ -49,7 +50,9 @@
                     array('label'=>'Home', 'url'=>array('site/index')),
                     // 'Products' menu item will be selected no matter which tag parameter value is since it's not specified.
                     array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
-                        array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+                        array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new'), 'items'=>array(
+                            array('label'=>'Bestsellers', 'url'=>array('product/bestseller', 'tag'=>'popular')),
+                        )),
                         array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
                     )),
                     array('label'=>'Login', 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),

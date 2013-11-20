@@ -3,7 +3,6 @@
 /* @var $model Post */
 
 $this->breadcrumbs=array(
-	'Записи'=>array('index'),
 	'Создание',
 );
 

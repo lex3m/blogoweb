@@ -8,7 +8,7 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Блог О Web',
-
+    'defaultController'=>'post',
 	// preloading 'log' component
 	'preload'=>array('log'),
 
@@ -57,10 +57,14 @@ return array(
 		/*'db'=>array(
 			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
 		),*/
-		// uncomment the following to use a MySQL database
-
-		'db'=>array(
+        'cache'=>array(
+            'class'=>'CDbCache',
+            'connectionID'=>'db',
+        ),
+        'db'=>array(
+            'class'=>'system.db.CDbConnection',
 			'connectionString' => 'mysql:host=localhost;dbname=blog',
+            'schemaCachingDuration'=>3600,
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',

@@ -56,6 +56,8 @@ class Category extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Категория',
+            'description' => 'Описание',
+            'parent_cat_id' => 'Родительская категория',
 		);
 	}
 
@@ -182,7 +184,8 @@ class Category extends CActiveRecord
     {
         $category = self::model()->findByPk($id);
         if($category===null)
-            throw new CHttpException(404,'Данная категория не найдена.');
+            return null;
+//            throw new CHttpException(404,'Данная категория не найдена.');
         return $category->name;
 
     }

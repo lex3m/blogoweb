@@ -164,7 +164,8 @@ class Comment extends CActiveRecord
      */
     public function findRecentComments($limit=10)
     {
-        return $this->with('post')->findAll(
+        $dependency = new CDbCacheDependency('SELECT MAX(create_time) FROM tbl_comment');
+        return $this->cache(1000, $dependency, 2)->with('post')->findAll(
             array(
                 'condition'=>'t.status='.self::STATUS_APPROVED,
                 'order'=>'t.create_time DESC',

@@ -3,8 +3,7 @@
 /* @var $model Post */
 
 $this->breadcrumbs=array(
-	'Записи'=>array('index'),
-	'Управление',
+	'Управление записями',
 );
 
 $this->menu=array(
