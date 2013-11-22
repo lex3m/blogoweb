@@ -30,6 +30,7 @@ class Category extends CActiveRecord
 			array('name, description', 'required'),
 			array('name', 'length', 'max'=>128),
 			array('description', 'length', 'max'=>256),
+            array('parent_cat_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, description', 'safe', 'on'=>'search'),
@@ -84,6 +85,9 @@ class Category extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
 			'criteria'=>$criteria,
 		));
 	}
@@ -141,6 +145,28 @@ class Category extends CActiveRecord
         return self::$_items;
     }
 
+    /**
+     * @param $parentId
+     * @param $lvl
+     */
+    private static function deleteTree($parentId, $lvl)
+    {
+        $categories = self::model()->findAll(
+            array(
+                'condition'=>'parent_cat_id=:parentID',
+                'params'=>array(':parentID'=>$parentId),
+            )
+        );
+        foreach($categories as $category) {
+            $lvl++;
+            $category->delete();
+            Post::model()->deleteAll('category_id='.$category->id);
+            self::deleteTree($category->id, $lvl);
+            $lvl--;
+        }
+    }
+
+
     public static function getMenu($pid, $level)
     {
 
@@ -180,15 +206,31 @@ class Category extends CActiveRecord
         ));
     }
 
+    /**
+     * @param $id
+     * @return category name or null if category is base
+     */
     public static function getCategoryById($id)
     {
         $category = self::model()->findByPk($id);
         if($category===null)
             return null;
-//            throw new CHttpException(404,'Данная категория не найдена.');
         return $category->name;
 
     }
+
+    /**
+     * Function working after parent Delete
+     */
+    protected function afterDelete()
+    {
+        parent::afterDelete();
+
+        //delete all subcategories
+        self::model()->deleteTree($this->id, 0);
+
+    }
+
     /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

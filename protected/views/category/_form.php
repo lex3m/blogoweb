@@ -35,7 +35,7 @@
             echo $form->labelEx($model,'parent_cat_id');
             echo $form->dropDownList($model, 'parent_cat_id', Category::getTree(), array('prompt' => '< Выберите категорию >',
             ));
-            echo $form->error($model,'category_id');
+            echo $form->error($model,'parent_cat_id');
         ?>
 	</div>
 

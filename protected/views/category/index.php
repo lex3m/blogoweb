@@ -3,17 +3,14 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Categories',
+	'Категории',
 );
 
-$this->menu=array(
-	array('label'=>'Create Category', 'url'=>array('create')),
-	array('label'=>'Manage Category', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Categories</h1>
+<h1>Категории</h1>
 
+<?php echo CHtml::link(CHtml::button('Создать категорию'), array('create')); ?>
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',

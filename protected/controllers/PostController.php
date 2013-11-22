@@ -237,6 +237,20 @@ class PostController extends Controller
         return $this->_model;
     }
 
+    /**
+     * Suggests tags based on the current user input.
+     * This is called via AJAX when the user is entering the tags input.
+     */
+    public function actionSuggestTags()
+    {
+        if(isset($_GET['q']) && ($keyword=trim($_GET['q']))!=='')
+        {
+            $tags=Tag::model()->suggestTags($keyword);
+            if($tags!==array())
+                echo implode("\n",$tags);
+        }
+    }
+
 	/**
 	 * Performs the AJAX validation.
 	 * @param Post $model the model to be validated

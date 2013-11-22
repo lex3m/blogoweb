@@ -14,9 +14,10 @@
     </div>
     <div class="content">
         <?php
-        $this->beginWidget('CMarkdown', array('purifyOutput'=>true));
-        echo $data->content;
-        $this->endWidget();
+          if (Yii::app()->controller->action->id == 'index')
+            echo Post::model()->trimPost($data->content, 500);
+          else
+            echo $data->content;
         ?>
     </div>
     <div class="nav">

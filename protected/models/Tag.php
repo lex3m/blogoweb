@@ -176,6 +176,25 @@ class Tag extends CActiveRecord
         return $tags;
     }
 
+    public function suggestTags($keyword, $limit=20)
+    {
+        $tags = $this->model()->findAll(
+          array(
+              'condition'=>'name LIKE :keyword',
+              'order'=>'frequency DESC, name',
+              'limit'=>$limit,
+              'params'=>array(
+                ':keyword'=>'%'.strtr($keyword,array('%'=>'\%', '_'=>'\_', '\\'=>'\\\\')).'%',
+              ),
+          )
+        );
+        $names = array();
+        foreach($tags as $tag) {
+            array_push($names, $tag->name);
+        }
+        return $names;
+    }
+
 
     /**
 	 * Returns the static model of the specified AR class.

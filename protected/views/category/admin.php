@@ -3,13 +3,8 @@
 /* @var $model Category */
 
 $this->breadcrumbs=array(
-	'Categories'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List Category', 'url'=>array('index')),
-	array('label'=>'Create Category', 'url'=>array('create')),
+	'Категории'=>array('index'),
+	'Управление',
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -28,6 +23,7 @@ $('.search-form form').submit(function(){
 
 <h1>Управление категориями</h1>
 
+<?php echo CHtml::link(CHtml::button('Создать категорию'), array('create')); ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'category-grid',
 	'dataProvider'=>$model->search(),
@@ -47,7 +43,7 @@ $('.search-form form').submit(function(){
         ),
         array(
             'class'=>'CButtonColumn',
-            'template' => '{update} {delete}',
+            'template' => '{update} {delete}'
         ),
 	),
 )); ?>
