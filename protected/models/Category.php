@@ -45,6 +45,7 @@ class Category extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'posts' => array(self::HAS_MANY, 'Post', 'category_id'),
             'categories' => array(self::BELONGS_TO, 'Category', 'parent_cat_id'),
 		);
 	}
@@ -177,22 +178,27 @@ class Category extends CActiveRecord
                 'order'=>'name',
             )
         );
-        if ($level == 0)
-            echo "<ul id='left-menu'>";
-        else
-            echo "<ul>";
-        foreach ($categories as $category) {
-            $level++;
-            $id = $category->id;
-            echo "<li>";
-            echo CHtml::link($category->name, Yii::app()->createUrl('post/index', array(
-                'category_id' => $category->id,
-                'name' => $category->name,
-            )));
-            self::getMenu($id, $level);
-            $level--;
+        if (!empty($categories)) {
+            if ($level == 0)
+                echo "<ul class='accordion' id='left-menu'>";
+            else
+                echo "<ul class='level-$level'>";
+            foreach ($categories as $category) {
+                $level++;
+                $id = $category->id;
+                echo "<li>";
+                if (!empty($category->posts))
+                    echo CHtml::link($category->name, Yii::app()->createUrl('post/index', array(
+                        'category_id' => $category->id,
+                        'name' => $category->name,
+                    )));
+                else
+                    echo CHtml::link($category->name);
+                self::getMenu($id, $level);
+                $level--;
+            }
+            echo "</ul>";
         }
-        echo "</ul>";
 
     }
 

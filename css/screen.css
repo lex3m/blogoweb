@@ -85,8 +85,10 @@ caption {background:#eee;}
 .span-2 {width:70px;}
 .span-3 {width:110px;}
 .span-4 {width:150px;}
-.span-5 {width:190px;}
-.span-6 {width:230px;}
+/*.span-5 {width:190px;}*/
+.span-5 {width:180px;}
+/*.span-6 {width:230px;}*/
+.span-6 {width:235px;}
 .span-7 {width:270px;}
 .span-8 {width:310px;}
 .span-9 {width:350px;}

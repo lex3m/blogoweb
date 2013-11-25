@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 
 ?>
-
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tinymce/tinymce.min.js" ></script>
 <?php
 Yii::app()->clientScript->registerScript('post-form', "
     tinymce.init({

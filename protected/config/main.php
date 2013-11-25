@@ -30,13 +30,19 @@ return array(
 
 	),
     'language' => 'ru',
-	// application components
+    // application components
 	'components'=>array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
-		// uncomment the following to enable URLs in path-format
+
+        'clientScript' => array(
+            'scriptMap' => array(
+                'jquery.js' => false,
+            )
+        ),
+        // uncomment the following to enable URLs in path-format
 
 		'urlManager'=>array(
             'showScriptName' => false, //hide index.php from url

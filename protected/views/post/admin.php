@@ -25,7 +25,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Управление Записями</h1>
+<h1>Управление записями</h1>
 
 <?php echo CHtml::link(CHtml::button('Создать запись'), array('create')); ?>
 <p>

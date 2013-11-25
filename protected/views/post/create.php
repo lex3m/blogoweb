@@ -12,8 +12,6 @@ $this->menu=array(
 );
 ?>
 
-
-
-<h1>Создать Запись</h1>
+<h1>Создать запись</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
