@@ -30,6 +30,7 @@ return array(
 
 	),
     'language' => 'ru',
+    'theme'=>'blackboot',
     // application components
 	'components'=>array(
 		'user'=>array(
@@ -39,7 +40,7 @@ return array(
 
         'clientScript' => array(
             'scriptMap' => array(
-                'jquery.js' => false,
+//                'jquery.js' => false,
             )
         ),
         // uncomment the following to enable URLs in path-format

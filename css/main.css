@@ -29,7 +29,8 @@ body
 
 #sidebar
 {
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #footer
@@ -190,9 +191,14 @@ div.breadcrumbs span
     padding: 2px 0 4px 0px;
 }
 
-.post
+.items .post
 {
     margin: 0 0 20px;
+}
+
+.post
+{
+    margin: -10px 0 20px;
 }
 
 .post .title

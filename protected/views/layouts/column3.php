@@ -14,7 +14,7 @@
         $('#left-menu').dcAccordion({
             eventType: 'click',
             autoClose: true,
-            saveState: false,
+            saveState: true,
             disableLink: true,
             showCount: false,
             menuClose: true,
