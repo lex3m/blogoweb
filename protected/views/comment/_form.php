@@ -1,0 +1,54 @@
+<?php
+/* @var $this CommentController */
+/* @var $model Comment */
+/* @var $form CActiveForm */
+?>
+
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'comment-form',
+	// Please note: When you enable ajax validation, make sure the corresponding
+	// controller action is handling ajax validation correctly.
+	// There is a call to performAjaxValidation() commented in generated controller code.
+	// See class documentation of CActiveForm for details on this.
+	'enableAjaxValidation'=>true,
+)); ?>
+
+	<p class="note">Поля с <span class="required">*</span> обязательные.</p>
+
+	<?php echo $form->errorSummary($model); ?>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'author'); ?>
+        <?php echo $form->textField($model,'author',
+            array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->name: '')); ?>
+        <?php echo $form->error($model,'author'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'email'); ?>
+        <?php echo $form->textField($model,'email',
+            array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->email: '')); ?>
+        <?php echo $form->error($model,'email'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'url'); ?>
+        <?php echo $form->textField($model,'url',array('size'=>60,'maxlength'=>128)); ?>
+        <?php echo $form->error($model,'url'); ?>
+    </div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'content'); ?>
+		<?php echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->error($model,'content'); ?>
+	</div>
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Отправить' : 'Сохранить'); ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->
