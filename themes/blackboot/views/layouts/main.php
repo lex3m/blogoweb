@@ -134,6 +134,7 @@
 
 <?php
 $clickJS = <<<MENU
+alert($.cookie);
 var loc = location.pathname.split("/");
 if (location.hostname !== 'blogoweb.net') {
     if (!loc[2]) {
