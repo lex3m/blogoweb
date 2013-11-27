@@ -152,7 +152,7 @@ if (location.hostname !== 'blogoweb.net') {
     }
 }
 MENU;
-    Yii::app()->getClientScript()->registerScript('delete', $clickJS);
+    Yii::app()->getClientScript()->registerScript('menu', $clickJS);
 
 ?>
 </body>
