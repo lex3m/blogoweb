@@ -134,6 +134,15 @@
 
 <?php
 $clickJS = <<<MENU
+  $.cookie("openItem", null);
+  $("#left-menu a").click(function(){
+        $.cookie("openItem", $(this).attr("href"));
+  });
+  alert( $.cookie("openItem") )
+  $("#left-menu a[href$='" + $.cookie("openItem") + "']").addClass("active");
+//  $("a.active").parents("a.dcjq-parent").addClass("active");
+  $("a.active").parents("ul").show();
+
 var loc = location.pathname.split("/");
 if (location.hostname !== 'blogoweb.net') {
     if (!loc[2]) {
