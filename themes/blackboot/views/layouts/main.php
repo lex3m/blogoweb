@@ -43,7 +43,7 @@
 </head>
 
 <body>
-	<div class="navbar navbar-inverse navbar-static-top">
+	<div class="navbar navbar-inverse navbar-static-top" id="first-navbar">
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -112,66 +112,48 @@
             <?php echo $content ?>
         </div><!--/.container-->
 	</div>
-	
-<!--	<div class="extra">-->
-<!--	  <div class="container">-->
-<!--		<div class="row">-->
-<!--			<div class="col-md-3">-->
-<!--				<h4>Heading 1</h4>-->
-<!--				<ul>-->
-<!--					<li><a href="#">Subheading 1.1</a></li>-->
-<!--					<li><a href="#">Subheading 1.2</a></li>-->
-<!--					<li><a href="#">Subheading 1.3</a></li>-->
-<!--					<li><a href="#">Subheading 1.4</a></li>-->
-<!--				</ul>--
-<!--			</div> <!-- /span3 -->
-<!--			-->
-<!--			<div class="col-md-3">-->
-<!--				<h4>Heading 2</h4>-->
-<!--				<ul>-->
-<!--					<li><a href="#">Subheading 2.1</a></li>-->
-<!--					<li><a href="#">Subheading 2.2</a></li>-->
-<!--					<li><a href="#">Subheading 2.3</a></li>-->
-<!--					<li><a href="#">Subheading 2.4</a></li>-->
-<!--				</ul>-->
-<!--			</div> <!-- /span3 -->
-<!--			-->
-<!--			<div class="col-md-3">-->
-<!--				<h4>Heading 3</h4>	-->
-<!--				<ul>-->
-<!--					<li><a href="#">Subheading 3.1</a></li>-->
-<!--					<li><a href="#">Subheading 3.2</a></li>-->
-<!--					<li><a href="#">Subheading 3.3</a></li>-->
-<!--					<li><a href="#">Subheading 3.4</a></li>-->
-<!--				</ul>-->
-<!--			</div> <!-- /span3 -->
-<!--			-->
-<!--			<div class="col-md-3">-->
-<!--				<h4>Heading 4</h4>-->
-<!--				<ul>-->
-<!--					<li><a href="#">Subheading 4.1</a></li>-->
-<!--					<li><a href="#">Subheading 4.2</a></li>-->
-<!--					<li><a href="#">Subheading 4.3</a></li>-->
-<!--					<li><a href="#">Subheading 4.4</a></li>-->
-<!--				</ul>-->
-<!--				</div> <!-- /span3 -->
-<!--			</div> <!-- /row -->
-<!--		</div> <!-- /container -->
-<!--	</div>-->
-	
+
 	<div class="footer">
 	  <div class="container">
 		<div class="row pull-left">
-			<div id="footer-copyright" class="col-md-6">
-			    Главная | О авторе | Контакты
+			<div id="footer-menu" >
+			    <?php echo CHtml::link('Главная', Yii::app()->createUrl('post/index'), array('id'=>'home')); ?> |
+                <?php echo CHtml::link('О авторе', Yii::app()->createUrl('site/page', array(
+                    'view' => 'about',
+                )), array('id'=>'about')) ?> |
+                <?php echo CHtml::link('Контакты', Yii::app()->createUrl('site/contact'), array('id'=>'contact')) ?>
 			</div> <!-- /span6 -->
 		 </div> <!-- /row -->
           <div class="row pull-right">
-              <div id="footer-terms" class="col-md-6">
+              <div id="footer-terms">
                   2013 &copy; <a href="http://vk.com/lexxus" target="_blank"> Алексей Федоренко </a>
               </div> <!-- /.span6 -->
           </div> <!-- /row -->
 	  </div> <!-- /container -->
 	</div>
+
+<?php
+$clickJS = <<<MENU
+var loc = location.pathname.split("/");
+if (location.hostname !== 'blogoweb.net') {
+    if (!loc[2]) {
+        $('#footer-menu').find('#home').addClass('active');
+    } else {
+        $('#footer-menu a[href^="/' + loc[1] +
+            '/' + loc[2]
+            + '/' + loc[3] + '"]').addClass('active');
+    }
+} else {
+    if (!loc[2]) {
+        $('#footer-menu').find('#home').addClass('active');
+    } else {
+        $('#footer-menu a[href^="/' + loc[1] +
+            '/' + loc[2] + '"]').addClass('active');
+    }
+}
+MENU;
+    Yii::app()->getClientScript()->registerScript('delete', $clickJS);
+
+?>
 </body>
 </html>

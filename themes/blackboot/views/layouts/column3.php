@@ -29,11 +29,13 @@ Yii::app()->clientScript->registerScript('left-menu', "
         </div>
     </div>
 </div>
+
 <div class="span7">
 	<div id="content">
 		<?php echo $content; ?>
 	</div><!-- content -->
 </div>
+
 <div class="span3">
 	<div id="sidebar">
         <?php if(!Yii::app()->user->isGuest) $this->widget('UserMenu'); ?>
