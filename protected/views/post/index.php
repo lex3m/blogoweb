@@ -12,7 +12,9 @@
 //);
 
 ?>
-
+<!--    <input type="button" id="setCookie" value="set cookie">-->
+<!--    <input type="button" id="getCookie" value="get cookie">-->
+<!--    <input type="button" id="deleteCookie" value="delete cookie">-->
 <?php if(!empty($_GET['tag'])): ?>
     <h1>Записи с тегом <i><?php echo CHtml::encode($_GET['tag']); ?></i></h1>
 <?php endif; ?>

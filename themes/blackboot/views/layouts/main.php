@@ -1,6 +1,7 @@
 <?php
 	Yii::app()->clientscript
         ->registerCoreScript( 'jquery' )
+        ->registerScriptFile( Yii::app()->request->baseUrl . '/js/helper.js', CClientScript::POS_END )
 		// use it when you need it!
 		/*
 		->registerCssFile( Yii::app()->theme->baseUrl . '/css/bootstrap.css' )
@@ -112,7 +113,6 @@
             <?php echo $content ?>
         </div><!--/.container-->
 	</div>
-
 	<div class="footer">
 	  <div class="container">
 		<div class="row pull-left">
@@ -134,19 +134,48 @@
 
 <?php
 $clickJS = <<<MENU
-  $.cookie("openItem", null);
-  $("#left-menu a").click(function(){
-        $.cookie("openItem", $(this).attr("href"));
-  });
-  alert( $.cookie("openItem") )
-  $("#left-menu a[href$='" + $.cookie("openItem") + "']").addClass("active");
+/*
+$("#setCookie").on('click', function( e ) {
+    $.cookie('test', 'test');
+    alert('cookie set');
+});
+
+$("#getCookie").on('click', function( e ) {
+    alert('cookie get ' + $.cookie('test'));
+});
+
+$("#deleteCookie").on('click', function( e ) {
+    $.cookie('test', null);
+    alert('cookie deleted');
+});
+*/
+
+//alert( getCookie("leftMenu") );
+if (getCookie("leftMenu") !== 'undefined') {
+    $("#left-menu a[href$='" + getCookie("leftMenu") + "']").addClass("active");
 //  $("a.active").parents("a.dcjq-parent").addClass("active");
-  $("a.active").parents("ul").show();
+    $("a.active").parents("ul").show();
+}
+
+  $("#left-menu a").on('click', function( e ) {
+        if ($(this).attr("href") !== '#') {
+            if (getCookie("leftMenu") !== 'undefined') {
+                 deleteCookie("leftMenu");
+                 alert(getCookie("leftMenu"))
+            }
+            setCookie("leftMenu", $(this).attr("href"));
+        }
+  });
+
+
 
 var loc = location.pathname.split("/");
 if (location.hostname !== 'blogoweb.net') {
     if (!loc[2]) {
         $('#footer-menu').find('#home').addClass('active');
+        //alert(1)
+        if (getCookie("leftMenu") !== 'undefined')
+            deleteCookie("leftMenu");
     } else {
         $('#footer-menu a[href^="/' + loc[1] +
             '/' + loc[2]
@@ -155,6 +184,8 @@ if (location.hostname !== 'blogoweb.net') {
 } else {
     if (!loc[2]) {
         $('#footer-menu').find('#home').addClass('active');
+        if (getCookie("leftMenu") !== 'undefined')
+            deleteCookie("leftMenu");
     } else {
         $('#footer-menu a[href^="/' + loc[1] +
             '/' + loc[2] + '"]').addClass('active');
