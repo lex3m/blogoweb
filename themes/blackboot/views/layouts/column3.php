@@ -12,7 +12,7 @@ Yii::app()->clientscript
 Yii::app()->clientScript->registerScript('left-menu', "
     $('#left-menu').dcAccordion({
         eventType: 'click',
-        autoClose: true,
+        autoClose: false,
         saveState: false,
         disableLink: true,
         showCount: false,

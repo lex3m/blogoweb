@@ -42,7 +42,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
 </head>
-
 <body>
 	<div class="navbar navbar-inverse navbar-static-top" id="first-navbar">
 		<div class="navbar-inner">
@@ -52,7 +51,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="<?php echo Yii::app()->request->baseUrl; ?>"><?php echo Yii::app()->name ?></a>
+				<a class="brand" href="<?php echo !empty(Yii::app()->request->baseUrl) ? Yii::app()->request->baseUrl : '/'; ?>"><?php echo Yii::app()->name ?></a>
 				<div class="nav-collapse pull-right">
 					<?php $this->widget('zii.widgets.CMenu',array(
 						'htmlOptions' => array( 'class' => 'nav' ),
@@ -134,63 +133,36 @@
 
 <?php
 $clickJS = <<<MENU
-/*
-$("#setCookie").on('click', function( e ) {
-    $.cookie('test', 'test');
-    alert('cookie set');
+
+$("#left-menu a").on('click', function( e ) {
+var links = $(this).next().find("a");
+$.each(links, function( index, value ) {
+  if (value == location.href)
+    $(this).addClass("active");
+});
 });
 
-$("#getCookie").on('click', function( e ) {
-    alert('cookie get ' + $.cookie('test'));
+$("#left-menu a").each(function( ) {
+     if ($(this).attr("href") == location.pathname && $(this).attr("href") !== '#') {
+        $(this).addClass("active");
+        $(this).parents("ul").show();
+        $(this).parents("ul").prev().addClass('active');
+     }
 });
 
-$("#deleteCookie").on('click', function( e ) {
-    $.cookie('test', null);
-    alert('cookie deleted');
+$("#footer-menu a").each(function( ) {
+    var link = location.href;
+    if ($(this).attr("href") == location.pathname) {
+        $(this).addClass("active");
+    }
 });
-*/
-
-//alert( getCookie("leftMenu") );
-if (getCookie("leftMenu") !== 'undefined') {
-    $("#left-menu a[href$='" + getCookie("leftMenu") + "']").addClass("active");
-//  $("a.active").parents("a.dcjq-parent").addClass("active");
-    $("a.active").parents("ul").show();
-}
-
-  $("#left-menu a").on('click', function( e ) {
-        if ($(this).attr("href") !== '#') {
-            if (getCookie("leftMenu") !== 'undefined') {
-                 deleteCookie("leftMenu");
-                 alert(getCookie("leftMenu"))
-            }
-            setCookie("leftMenu", $(this).attr("href"));
-        }
-  });
-
-
 
 var loc = location.pathname.split("/");
-if (location.hostname !== 'blogoweb.net') {
-    if (!loc[2]) {
-        $('#footer-menu').find('#home').addClass('active');
-        //alert(1)
-        if (getCookie("leftMenu") !== 'undefined')
-            deleteCookie("leftMenu");
-    } else {
-        $('#footer-menu a[href^="/' + loc[1] +
-            '/' + loc[2]
-            + '/' + loc[3] + '"]').addClass('active');
-    }
-} else {
-    if (!loc[2]) {
-        $('#footer-menu').find('#home').addClass('active');
-        if (getCookie("leftMenu") !== 'undefined')
-            deleteCookie("leftMenu");
-    } else {
-        $('#footer-menu a[href^="/' + loc[1] +
-            '/' + loc[2] + '"]').addClass('active');
-    }
+
+if (!loc[2] || loc[1] == 'post' || loc[1] == 'posts') {
+    $('#footer-menu').find('#home').addClass('active');
 }
+
 MENU;
     Yii::app()->getClientScript()->registerScript('menu', $clickJS);
 

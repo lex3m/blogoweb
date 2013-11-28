@@ -8,12 +8,12 @@
  */
 
 body {
-	padding-top: 40px;
-
+	/*padding-top: 40px;*/
+    background:url(../img/tiny_grid.png) repeat 0 0;
   }
 
 div.cont {
-	background:url(../img/tiny_grid.png) repeat 0 0;
+
 	height:100%;
 	min-height:500px;
 	/*padding-top:30px;*/
