@@ -33,6 +33,7 @@ div.cont {
     border-radius:3px;
     -webkit-border-radius:3px;
     -moz-border-radius:3px;
+    margin-top: 10px ;
     margin-bottom: 10px ;
     box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
     -webkit-box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
@@ -40,21 +41,60 @@ div.cont {
     min-height:300px;
 }
 
-
- 
 p, div {
   font-size:13px;
 }
 
 div.portlet-decoration {
 color: #fff;
-background-color: #000;
+background: #111;
 padding: 10px 15px;
 border-bottom: 1px solid transparent;
-border-top-right-radius: 3px;
-border-top-left-radius: 3px;
+/*border-top-right-radius: 3px;*/
+/*border-top-left-radius: 3px;*/
+border-left: none;
 }
 
+div.portlet-title {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    color: #ddd;
+}
+
+div.portlet-content {
+    font-size: 0.9em;
+    margin: 0;
+    /*padding: 5px 8px;*/
+    margin-bottom: 15px;
+    padding: 30px;
+    background: -moz-linear-gradient(top, #F5F5F5 0%, #FFFFFF 7%, #FFFFFF 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#F5F5F5), color-stop(7%,#FFFFFF), color-stop(100%,#FFFFFF));
+    background: -webkit-linear-gradient(top, #F5F5F5 0%,#FFFFFF 7%,#FFFFFF 100%);
+    background: -o-linear-gradient(top, #F5F5F5 0%,#FFFFFF 7%,#FFFFFF 100%);
+    background: -ms-linear-gradient(top, #F5F5F5 0%,#FFFFFF 7%,#FFFFFF 100%);
+    background: linear-gradient(top, #F5F5F5 0%,#FFFFFF 7%,#FFFFFF 100%);
+    box-shadow: 0px 0px 3px 0px #ccc;
+    -webkit-box-shadow: 0px 0px 3px 0px #ccc;
+    -moz-box-shadow: 0px 0px 3px 0px #ccc;
+    overflow: hidden;
+}
+div.portlet-content a {
+    color: #3d3518;
+}
+
+#catHead {
+
+    width: 100%;
+    padding: 0;
+    font-size: 26px;
+    line-height: 36px;
+    color: #333333;
+    border: none;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
 
 ul li { font-size:13px; }
 
@@ -466,7 +506,9 @@ input[type="checkbox"][readonly] {
 .breadcrumb .active a {
   color: #333333;
 }
-
+.breadcrumb a {
+    color: #3d3518;
+}
 /* Table */
 
 .grid-view table.items {
@@ -612,7 +654,15 @@ p.hint { float:left; display:block;}
 #left-align {
     margin: 0;
 }
+
+#content .post{
+    margin: 0;
+}
+#content .items .post {
+    margin: 0 0 20px;
+}
 .entry-wrapper, .widget-container, .entry-wrapper-portfolio {
+    margin: 0;
     padding: 30px;
     background: #FFFFFF;
     background: -moz-linear-gradient(top, #F5F5F5 0%, #FFFFFF 7%, #FFFFFF 100%);
@@ -626,15 +676,18 @@ p.hint { float:left; display:block;}
     -moz-box-shadow: 0px 0px 3px 0px #ccc;
     overflow: hidden;
 }
+.entry-wrapper a {
+    color: #3d3518;
+}
 .post-meta {
     line-height: 25px;
     font-size: 11px;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 .tale-box {
     width: 55px;
     height: 25px;
-    background: #96917f url("../img/post_meta_icons/regular_post_small.png") no-repeat 20px 5px;
+    background: #96917f url("../img/regular_post_small.png") no-repeat 20px 5px;
     float: left;
 }
 .post-date {
@@ -643,21 +696,44 @@ p.hint { float:left; display:block;}
     width: 50px;
     border-right: 1px dashed #E5E5E5;
     border-bottom: 1px dashed #E5E5E5;
-    padding-right: 10px;
+    padding-right: 17px;
     text-shadow: 0 0 1px #FFFFFF;
     float: left;
 }
 .post-tag {
-    height: 25px;
     border-bottom: 1px dashed #E5E5E5;
-    margin-left: 125px;
+    border-right: 1px dashed #E5E5E5;
+    padding-right: 4px;
     font-weight: bold;
 }
-.post-tag span {
+.post-category {
+    border-bottom: 1px dashed #E5E5E5;
+    /*margin-left: 130px;*/
+    font-weight: bold;
+}
+.post-tag span, .post-category span {
     color: #b7b7b7;
 }
 .post-teaser {
     border-bottom: 1px dashed #E5E5E5;
+}
+.post-teaser h1 {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: 24px !important;
+    line-height: 36px;
+    color: #333333;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+#line {
+    width:auto;
+    height:25px;
+    float:left;
+    margin-left:3px;
+    text-align:center;
 }
 .post-teaser h1 {
     font-size: 26px;

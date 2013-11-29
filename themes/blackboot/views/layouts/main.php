@@ -159,7 +159,8 @@ $("#footer-menu a").each(function( ) {
 
 var loc = location.pathname.split("/");
 
-if (!loc[2] || loc[1] == 'post' || loc[1] == 'posts') {
+if (!loc[2] || loc[1] == 'post' || loc[1] == 'posts' ||
+    loc[2] == 'post' || loc[2] == 'posts') {
     $('#footer-menu').find('#home').addClass('active');
 }
 

@@ -20,4 +20,5 @@ class TagCloud extends CPortlet
         }
 
     }
+
 }
