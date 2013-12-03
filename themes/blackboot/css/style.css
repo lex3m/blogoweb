@@ -996,3 +996,7 @@ p.hint { float:left; display:block;}
     margin: 0;
 }
 
+#Comment_content_em_ {
+    margin-left: 80px;
+    margin-top: 10px;
+}

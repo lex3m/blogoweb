@@ -27,42 +27,38 @@
                     <img data-role="user-avatar" src="//www.gravatar.com/avatar.php?default=http%3A%2F%2Fa.disquscdn.com%2F1385503134%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=5c8f3aa61a99af63919117be1ccc19f6">
                 </span>
             </div>
+            <div class="textarea-wrapper">
+                <?php echo $form->textArea($model,'content',array('rows'=>6,'class'=>'textarea',
+                    'placeholder'=>'Ваш комментарий',)); ?>
+            </div>
+            <?php echo $form->error($model,'content'); ?>
+            <section data-role="auth-or-ident" class="auth-section logged-out">
+                <div class="guest">
+                    <p class="input-wrapper">
+                        <?php echo $form->textField($model,'author',
+                            array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->name: '',
+                            'placeholder'=>'Имя', 'maxlength'=>30)); ?>
+                        <?php echo $form->error($model,'author'); ?>
+                    </p>
 
-            <?php echo $form->errorSummary($model); ?>
-                <div class="textarea-wrapper">
-                    <?php echo $form->textArea($model,'content',array('rows'=>6,'class'=>'textarea',
-                        'placeholder'=>'Ваш комментарий',)); ?>
-                    <?php echo $form->error($model,'content'); ?>
+                    <p class="input-wrapper">
+                        <?php echo $form->emailField($model,'email',
+                            array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->email: '',
+                                'placeholder'=>'Электронная почта')); ?>
+                        <?php echo $form->error($model,'email'); ?>
+                    </p>
+
+                    <p class="input-wrapper">
+                        <?php echo $form->textField($model,'url',array('size'=>60,'maxlength'=>128,
+                            'placeholder'=>'Веб-сайт')); ?>
+                        <?php echo $form->error($model,'url'); ?>
+                    </p>
                 </div>
-                <section data-role="auth-or-ident" class="auth-section logged-out">
-                    <div class="guest">
+                <div class="row buttons">
+                    <?php echo CHtml::submitButton($model->isNewRecord ? 'Отправить' : 'Сохранить'); ?>
+                </div>
 
-
-                        <p class="input-wrapper">
-                            <?php echo $form->textField($model,'author',
-                                array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->name: '',
-                                'placeholder'=>'Имя', 'maxlength'=>30)); ?>
-                            <?php echo $form->error($model,'author'); ?>
-                        </p>
-
-                        <p class="input-wrapper">
-                            <?php echo $form->emailField($model,'email',
-                                array('size'=>60,'maxlength'=>128,'value'=>!Yii::app()->user->isGuest ? Yii::app()->user->email: '',
-                                    'placeholder'=>'Электронная почта')); ?>
-                            <?php echo $form->error($model,'email'); ?>
-                        </p>
-
-                        <p class="input-wrapper">
-                            <?php echo $form->textField($model,'url',array('size'=>60,'maxlength'=>128,
-                                'placeholder'=>'Веб-сайт')); ?>
-                            <?php echo $form->error($model,'url'); ?>
-                        </p>
-                    </div>
-                    <div class="row buttons">
-                        <?php echo CHtml::submitButton($model->isNewRecord ? 'Отправить' : 'Сохранить'); ?>
-                    </div>
-
-                </section>
+            </section>
 
         </div>
     <?php $this->endWidget(); ?>
