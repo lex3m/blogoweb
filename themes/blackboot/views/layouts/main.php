@@ -84,13 +84,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" target="_blank">
+                        <a href="<?php echo Yii::app()->baseUrl.'/rss.xml'; ?>" target="_blank">
                             <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/rss.png" width="24" height="24" alt="RSS">
                         </a>
                     </li>
                 </ul>
-                <form class="navbar-search pull-right" action="<?php echo Yii::app()->request->baseUrl; ?>">
-                    <input type="text" class="search-query" placeholder="Поиск" name="q" value="">
+                <form class="navbar-search pull-right" action="<?php echo 'http://'.Yii::app()->request->getServerName().'/' ?>">
+                    <input type="text" class="search-query" placeholder="Поиск" name="q" value="<?php echo isset($_GET['q']) ? $_GET['q'] : ''?>">
                 </form>
             </div>
         </div>

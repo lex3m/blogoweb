@@ -49,17 +49,19 @@ return array(
             'showScriptName' => false, //hide index.php from url
 			'urlFormat'=>'path',
 			'rules'=>array(
-                'post/<id:\d+>/<title:.*?>'=>'post/view',
+                'post/<id:\d+>/<seo_url:.*?>'=>'post/view',
                 'post/view/<id:\d+>'=>'post/view',
                 'posts/<tag:.*?>'=>'post/index',
                 'page/<view:\w+>' => 'site/page',
                 'post/category/<category_id:\d+>/<name:.*?>'=>'post/index',
                 'post/update/<id:\d+>'=>'post/update',
+                'rss.xml'=>'post/feed',
                 'comment/update/<id:\d+>'=>'comment/update',
 //				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 //				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ),
+            'urlSuffix'=>'.html'
 		),
 
 		/*'db'=>array(

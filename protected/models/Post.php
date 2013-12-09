@@ -13,12 +13,13 @@
  * @property integer $update_time
  * @property integer $author_id
  * @property integer $category_id
+ * @property string $seo_url
  *
  * The followings are the available model relations:
  * @property Comment[] $comments
  * @property User $author
  */
-class Post extends CActiveRecord
+class Post extends MyActiveRecord
 {
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISHED = 2;
@@ -43,7 +44,7 @@ class Post extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title, content, status, category_id', 'required'),
-			array('title', 'length', 'max'=>128,
+			array('title, seo_url', 'length', 'max'=>128,
                 'message'=>'Длина заголовка не должна превышать 128 символов.'),
             array('status', 'in', 'range'=>array(1,2,3),
                 'message'=>'Статус должен быть в диапазоне от 1 до 3.'),
@@ -53,6 +54,7 @@ class Post extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('title, status', 'safe', 'on'=>'search'),
+            array('seo_url','unsafe'),
 		);
 	}
 
@@ -75,6 +77,7 @@ class Post extends CActiveRecord
 		);
 	}
 
+
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -90,6 +93,7 @@ class Post extends CActiveRecord
 			'update_time' => 'Дата обновления',
 			'author_id' => 'Автор',
             'category_id' => 'Категория',
+            'seo_url' => 'URL',
 		);
 	}
 
@@ -145,7 +149,7 @@ class Post extends CActiveRecord
     {
         return Yii::app()->createUrl('post/view', array(
            'id' => $this->id,
-           'title' => $this->title,
+           'seo_url' => $this->seo_url,
         ));
     }
 
@@ -171,6 +175,7 @@ class Post extends CActiveRecord
             {
                 $this->create_time=$this->update_time=time();
                 $this->author_id=Yii::app()->user->id;
+                $this->seo_url = $this->translit($this->title);
             }
             else
                 $this->update_time=time();

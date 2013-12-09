@@ -174,6 +174,14 @@ class PostController extends Controller
         if(isset($_GET['category_id']))
             $criteria->addSearchCondition('category_id', intval($_GET['category_id']));
 
+        if(isset($_GET['tag']))
+            $criteria->addSearchCondition('tags',$_GET['tag']);
+
+        if (isset($_GET['q']) && !empty($_GET['q'])) {
+            $criteria->addSearchCondition('title', $_GET['q']);
+            $criteria->addSearchCondition('content', $_GET['q'], true, 'OR');
+        }
+
 		$dataProvider=new CActiveDataProvider('Post', array (
                 'pagination'=>array(
                     'pageSize'=>Yii::app()->params['onPage'],
@@ -185,6 +193,50 @@ class PostController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
+
+    /**
+     * Make RSS channel using edeed ext
+     */
+    public function actionFeed()
+    {
+        Yii::import('ext.feed.*');
+        // RSS 2.0 is the default type
+        $feed = new EFeed();
+
+        $feed->title= Yii::app()->name;
+        $feed->description = 'RSS лента блога о веб разработке';
+
+        $feed->addChannelTag('language', Yii::app()->language);
+        $feed->addChannelTag('pubDate', date(DATE_RSS, time()));
+        $feed->addChannelTag('link', 'http://'.Yii::app()->request->getServerName().'/rss.xml');
+
+        $criteria=new CDbCriteria(array(
+            'condition'=>'status='.Post::STATUS_PUBLISHED,
+            'order'=>'update_time DESC',
+            'limit'=>20,
+        ));
+
+        $posts = Post::model()->findAll($criteria);
+
+        foreach($posts as $post) {
+
+            $item = $feed->createNewItem();
+
+            $item->title = $post->title;
+            $item->link = 'http://'.Yii::app()->request->getServerName().Yii::app()->createUrl($post->url);
+            $item->date = $post->update_time;
+            $item->description = $post->content;
+
+            $item->addTag('author', Yii::app()->params['adminEmail']);
+            $item->addTag('guid','http://'.Yii::app()->request->getServerName().Yii::app()->createUrl($post->id.'/'.$post->seo_url), array('isPermaLink'=>'true'));
+
+            $feed->addItem($item);
+
+        }
+
+        $feed->generateFeed();
+        Yii::app()->end();
+    }
 
 	/**
 	 * Manages all models.
