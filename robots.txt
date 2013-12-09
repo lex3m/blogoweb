@@ -1,0 +1,7 @@
+User-agent: *
+
+
+Disallow: /backend
+
+Host: blogoweb.net
+Crawl-delay: 2 #
