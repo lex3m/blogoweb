@@ -5,7 +5,13 @@
 <?php
 Yii::app()->clientscript
     ->registerCssFile( Yii::app()->request->baseUrl . '/css/social-likes.css' )
-    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/social-likes.min.js' );
+    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/social-likes.min.js' )
+
+    ->registerCssFile( Yii::app()->request->baseUrl . '/css/sh/shCoreRDark.css' )
+    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/sh/shCore.js' )
+    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/sh/shBrushJScript.js' )
+    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/sh/shBrushPhp.js' )
+    ->registerScriptFile( Yii::app()->request->baseUrl . '/js/sh/shBrushCss.js' );
 ?>
 
 <div class="post entry-wrapper">
@@ -63,6 +69,10 @@ Yii::app()->clientscript
                         h.appendChild(s);
                     }})();
             ", CClientScript::POS_READY);
+
+            Yii::app()->clientScript->registerScript('sh', "
+                SyntaxHighlighter.all();
+            ", CClientScript::POS_HEAD);
 
             Yii::app()->clientScript->registerCss(1,"
               .pluso {

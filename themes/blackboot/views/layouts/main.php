@@ -27,6 +27,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 <meta name="language" content="en" />
+
+<link rel="shortcut icon" href="<?php echo Yii::app()->baseUrl; ?>/favicon.ico">
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
