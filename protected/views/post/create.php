@@ -3,7 +3,7 @@
 /* @var $model Post */
 
 $this->breadcrumbs=array(
-	'Создание',
+	'Создание записи',
 );
 
 $this->menu=array(

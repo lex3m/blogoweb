@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	$model->title=>array('view','id'=>$model->id),
-	'Обновление',
+	'Обновление записей',
 );
 
 $this->menu=array(

@@ -2,9 +2,9 @@
 /* @var $this PostController */
 /* @var $dataProvider CActiveDataProvider */
 
-//$this->breadcrumbs=array(
-//	'Записи',
-//);
+$this->breadcrumbs=array(
+	'Записи',
+);
 //
 //$this->menu=array(
 //	array('label'=>'Создание Записи', 'url'=>array('create')),
