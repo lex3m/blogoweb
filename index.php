@@ -10,4 +10,16 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
-Yii::createWebApplication($config)->run();
+$app = Yii::createWebApplication($config);
+Yii::app()->onBeginRequest = function($event)
+{
+    // starting output buffering with gzip handler
+    return ob_start("ob_gzhandler");
+};
+// attaching a handler to application end
+Yii::app()->onEndRequest = function($event)
+{
+    // releasing output buffer
+    return ob_end_flush();
+};
+$app->run();

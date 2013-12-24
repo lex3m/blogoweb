@@ -163,6 +163,7 @@ class PostController extends Controller
 	 */
 	public function actionIndex()
 	{
+        $this->pageTitle = Yii::app()->name. ' - Последние записи';
         $criteria=new CDbCriteria(array(
             'condition'=>'status='.Post::STATUS_PUBLISHED,
             'order'=>'update_time DESC',

@@ -10,7 +10,6 @@
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/skins/grey.css" rel="stylesheet" type="text/css">
 <script>
     $(document).ready(function($) {
-//        $( "#left-menu" ).menu();
         $('#left-menu').dcAccordion({
             eventType: 'click',
             autoClose: true,
@@ -27,7 +26,6 @@
         <div class="grey">
             <?php Category::getMenu(0,0); ?>
         </div>
-
     </div>
 </div>
 <div class="span-13">
@@ -42,26 +40,6 @@
             <?php $this->widget('TagCloud', array('maxTags'=>Yii::app()->params['tagCloudCount']));?>
         <?php $this->endCache(); } ?>
         <?php $this->widget('RecentComments', array('maxComments'=>Yii::app()->params['recentCommentCount']));?>
-        <?php
-//            $this->beginWidget('zii.widgets.CPortlet', array(
-//                'title'=>'Меню',
-//            ));
-            /*$this->widget('zii.widgets.CMenu', array(
-                'items'=>array(
-                    // Important: you need to specify url as 'controller/action',
-                    // not just as 'controller' even if default acion is used.
-                    array('label'=>'Home', 'url'=>array('site/index')),
-                    array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
-                        array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new'), 'items'=>array(
-                            array('label'=>'Bestsellers', 'url'=>array('product/bestseller', 'tag'=>'popular')),
-                        )),
-                        array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
-                    )),
-                    array('label'=>'Login', 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),
-                ),
-            ));*/
-//            $this->endWidget();
-        ?>
 	</div><!-- sidebar -->
 </div>
 <?php $this->endContent(); ?>

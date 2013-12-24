@@ -161,8 +161,7 @@ $("#footer-menu a").each(function( ) {
 
 var loc = location.pathname.split("/");
 
-if (!loc[2] || loc[1] == 'post' || loc[1] == 'posts' ||
-    loc[2] == 'post' || loc[2] == 'posts') {
+if (!loc[1]) {
     $('#footer-menu').find('#home').addClass('active');
 }
 
